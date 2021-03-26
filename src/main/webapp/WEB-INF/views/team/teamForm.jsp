@@ -4,6 +4,7 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container" style="margin-top: 50px;">
+	<h2>팀 등록</h2>
 	<form action="/team" method="post">
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="팀이름" name="teamName">

@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayerInsertReqDto {
+public class PlayerPositionDto {
 
-	private String name;
 	private String position;
-	private String teamName;
-	
+	private String lotte;
+	private String samsung;
+	private String kia;
 }

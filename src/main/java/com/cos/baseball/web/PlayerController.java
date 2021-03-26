@@ -14,6 +14,7 @@ import com.cos.baseball.domain.player.Player;
 import com.cos.baseball.service.PlayerService;
 import com.cos.baseball.util.Script;
 import com.cos.baseball.web.dto.player.PlayerInsertReqDto;
+import com.cos.baseball.web.dto.player.PlayerPositionDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,4 +60,12 @@ public class PlayerController {
 		return "ok";
 	}
 	
+	@GetMapping("/position")
+	public String position(Model model) {
+		
+		List<PlayerPositionDto> dtos = playerService.포지션별선수();
+		model.addAttribute("dtos", dtos);
+		
+		return "player/positionList";
+	}
 }

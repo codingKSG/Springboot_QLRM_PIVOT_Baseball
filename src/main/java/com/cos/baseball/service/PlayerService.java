@@ -2,6 +2,10 @@ package com.cos.baseball.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +14,7 @@ import com.cos.baseball.domain.player.PlayerRepository;
 import com.cos.baseball.domain.team.Team;
 import com.cos.baseball.domain.team.TeamRepository;
 import com.cos.baseball.web.dto.player.PlayerInsertReqDto;
+import com.cos.baseball.web.dto.player.PlayerPositionDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +24,7 @@ public class PlayerService {
 	
 	private final PlayerRepository playerRepository;
 	private final TeamRepository teamRepository;
+	private final EntityManager em;
 	
 	@Transactional
 	public int 선수등록(PlayerInsertReqDto playerInsertReqDto) {
@@ -49,18 +55,23 @@ public class PlayerService {
 		playerRepository.deleteById(id);
 	}
 	
-	public void 피벗받기() {
+	@Transactional(readOnly = true)
+	public List<PlayerPositionDto> 포지션별선수() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("select p.position as '포지션', ");
-		sb.append("GROUP_CONCAT(case when t.teamName = '롯데자이언츠' ");
-		sb.append("THEN p.name ELSE null END) as '롯데자이언츠', ");
-		sb.append("GROUP_CONCAT(case when t.teamName = '삼성라이온즈' ");
-		sb.append("THEN p.name ELSE null END) as '삼성라이온즈'");
-		sb.append("GROUP_CONCAT(case when t.teamName = '기아타이거즈' ");
-		sb.append("THEN p.name ELSE null END) as '기아타이거즈'");
-		sb.append("from player p ");
-		sb.append("inner join team t on p.teamId = t.id GROUP BY p.position;");
+		sb.append("select p.position as 'position', ");
+		sb.append("GROUP_CONCAT(case when t.teamName = '롯데자이언츠' THEN p.name ELSE null END) as 'lotte', ");
+		sb.append("GROUP_CONCAT(case when t.teamName = '삼성라이온즈' THEN p.name ELSE null END) as 'samsung',");		
+		sb.append("GROUP_CONCAT(case when t.teamName = '기아타이거즈' THEN p.name ELSE null END) as 'kia' ");
+		sb.append("from player p inner join team t on p.teamId = t.id GROUP BY p.position;");
 		String pivot = sb.toString();
+		
+		JpaResultMapper jpaResultMapper = new JpaResultMapper();
+		Query query = em.createNativeQuery(pivot);
+		
+		List<PlayerPositionDto> dto = jpaResultMapper.list(query, PlayerPositionDto.class);
+		
+		System.out.println("PlayerPositionDto: "+dto);
+		
+		return dto;
 	}
-	
 }

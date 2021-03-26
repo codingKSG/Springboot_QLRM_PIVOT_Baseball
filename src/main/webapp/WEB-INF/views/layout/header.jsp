@@ -27,6 +27,6 @@
 			<li class="nav-item"><a class="nav-link" href="/stadium">야구장 목록</a></li>
 			<li class="nav-item"><a class="nav-link" href="/team">팀 목록</a></li>
 			<li class="nav-item"><a class="nav-link" href="/player">선수 목록</a></li>
-			<li class="nav-item"><a class="nav-link" href="#">포지션 별 선수</a></li>
+			<li class="nav-item"><a class="nav-link" href="/position">포지션 별 선수</a></li>
 		</ul>
 	</nav>
